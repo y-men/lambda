@@ -1,0 +1,10 @@
+
+spring:
+  application:
+    name: device
+  cloud:
+    config:
+      uri:  http://localhost:8001/config
+
+server:
+  port: 8081

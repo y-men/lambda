@@ -1,0 +1,31 @@
+# application.yml
+
+---
+spring:
+  application:
+    name: porte
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8001/eureka
+server:
+  port: 8080
+zuul:
+  prefix: /api
+  routes:
+    device:
+      path: /device/**
+      serviceId: device
+
+logging:
+  pattern:
+    console:  -%clr(%d{HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr{faint} %clr(%-30.30logger{0}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}
+
+  level:
+    root: info
+    org.springframework.cloud.netflix.zuul: DEBUG
+    io.porte: DEBUG

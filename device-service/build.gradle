@@ -1,0 +1,88 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'jacoco'
+    id 'com.github.johnrengelman.shadow' version '4.0.2'
+    id "com.adarshr.test-logger" version "1.5.0"
+    //id 'net.ltgt.apt' version '0.9'
+
+}
+
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'io'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://repo.spring.io/milestone" }
+}
+
+
+ext {
+    springCloudVersion = 'Greenwich.M1'
+
+}
+
+dependencies {
+
+    implementation "io:corelib:1.0-SNAPSHOT"
+    implementation "org.springframework.boot:spring-boot-configuration-processor"
+    implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+    implementation "io.springfox:springfox-swagger2:2.9.2"
+    implementation "io.springfox:springfox-swagger-ui:2.9.2"
+
+    implementation 'com.googlecode.jmapper-framework:jmapper-core:1.6.0'
+
+    compileOnly 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+
+// --- Boot ---------------------------------
+bootJar {
+    mainClassName = 'io.demo.DeviceService'
+}
+
+shadowJar {
+  baseName   = 'device-service'
+  classifier = ''
+  zip64 true
+
+  // see https://github.com/johnrengelman/shadow/issues/207
+  //transform(com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer)
+
+  mergeServiceFiles()
+   manifest {
+         attributes(
+         'Main-Class': 'io.demo.DeviceService'
+         )
+     }   
+}

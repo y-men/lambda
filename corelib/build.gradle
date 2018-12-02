@@ -1,0 +1,35 @@
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+
+group 'io'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly('org.projectlombok:lombok:1.18.2')
+    compileOnly('org.springframework:spring-core:5.0.8.RELEASE')
+    compileOnly('org.aspectj:aspectjweaver:1.9.2')
+    compileOnly('org.slf4j:slf4j-api:1.7.25')
+
+    compileOnly('org.springframework:spring-context-support:5.0.8.RELEASE')
+
+    testCompile('junit:junit:4.12')
+}

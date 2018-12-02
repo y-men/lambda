@@ -1,0 +1,77 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+    id 'com.github.johnrengelman.shadow' version '4.0.2'
+}
+
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'io.voute'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 10
+targetCompatibility = 10
+
+repositories {
+    mavenCentral()
+    maven { url "https://repo.spring.io/milestone" }
+}
+
+
+ext {
+    springCloudVersion = 'Greenwich.M1'
+}
+
+dependencies {
+    implementation('org.springframework.cloud:spring-cloud-starter')
+    
+    // Tomcat,JAXB
+    implementation( 'javax.xml.bind:jaxb-api:2.4.0-b180725.0427')
+    implementation('javax.activation:activation:1.1')
+    implementation('org.glassfish.jaxb:jaxb-runtime:2.3.0')
+    implementation('org.springframework.cloud:spring-cloud-config-server')
+    implementation('org.springframework.cloud:spring-cloud-starter-netflix-eureka-server')
+    compileOnly('org.projectlombok:lombok')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.springframework.security:spring-security-test')
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+// --- Boot ---------------------------------
+bootJar {
+    mainClassName = 'io.voute.Voute'
+    
+}
+
+shadowJar {
+    baseName   = 'voute'
+    classifier = ''
+    zip64 true
+    manifest {
+        attributes(
+                'Main-Class': 'io.voute.Voute'
+        )
+    }
+// see https://github.com/johnrengelman/shadow/issues/207
+//    transform(com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer)
+
+}
+

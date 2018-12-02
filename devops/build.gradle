@@ -1,0 +1,12 @@
+/*
+ todo
+    - Create a build.grade in devops project to addregate 'shadowJar' artifacts
+    - Use Dockerfile to create container
+    - Consider a Jenkins pipe form this...
+
+ */
+
+task copyJar {
+    dependencies shadowJar
+    copy( )
+}
